@@ -1,0 +1,18 @@
+{
+    "name": "Regex2Excel",
+    "description": "Herramienta GUI para buscar expresiones regulares en ficheros o carpetas y exportar las coincidencias a un archivo Excel (.xlsx).",
+    "version": "V22.10.0.025",
+    "owner": "Mario Rubio Avila",
+    "maintainer": "Mario Rubio",
+    "entry_point": "Regex2Excel.py",
+    "python_requires": ">=3.8",
+    "dependencies": ["pandas", "openpyxl"],
+    "known_issues": [],
+    "fixed_issues": [
+        "Si la expresión aparece más de una vez en la misma línea solo se captura la primera coincidencia. (Resuelto)",
+        "El nombre de salida por defecto puede incluir la extensión .xml y provocar errores si no se borra. (Resuelto)",
+        "Las coincidencias volcadas terminan con un paréntesis ')' añadido por el código. (Resuelto)"
+    ],
+    "notes": "Interfaz basada en Tkinter. Para procesar carpetas busca archivos con la extensión definida en la variable 'extensionSalidaBloque' (por defecto 'py'). Los problemas listados en 'fixed_issues' fueron corregidos en el script (capturas múltiples por línea, nombre por defecto de salida y formato de coincidencias).",
+    "url": "https://github.com/mrubiodev/Regex2Excel"
+}

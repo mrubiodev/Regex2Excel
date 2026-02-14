@@ -96,36 +96,27 @@ class MainApplication(tk.Frame):
         datos = []
         lineaConteo = []
         datosDic = {}
-        
         with open(fileOrigenParametro, encoding="utf8") as fname:
-            nombreFichero = fileOrigenParametro.split('/')[-1]
+            nombreFichero = os.path.basename(fileOrigenParametro)
             lineas = fname.readlines()
             contadorLinea = 1
-            for linea in lineas:
-                #if (contadorLinea == 608):
-                #    print ('revisa')
-                regularExpresion = self.entry.get()
+            regularExpresion = self.entry.get()
+            try:
                 regex = re.compile(regularExpresion)
-                #match = regex.search(linea)
-                #lista = match.groups()
-                #print (lista)
-                x = re.search(regularExpresion, linea.strip('\n'))
-                #y = re.findall(regularExpresion, linea, flags=0)
-                #for match in re.findall(regularExpresion, linea):
-                #    print('Found {!r}'.format(match))
-                #cu = re.split(regularExpresion, linea)
-                #f = re.finditer(regularExpresion, linea)
-                if (x != None):
-                #if (len(x) > 0): 
-                    #if (x != ''):
-                    if (len(x.regs) > 1): print ('Revise la linea : ' + str(contadorLinea))
-                    patronAVolcar = x.string[x.regs[0][0]:x.regs[0][1]] + ")"
-                    if (logsInConsole and debugMode): print ('Encontrado : ' + str(x.string))
+            except re.error:
+                messagebox.showerror(message="Expresión regular inválida.", title="Error Regex")
+                return pd.DataFrame({'archivo': [nombreFichero], 'resultados': [[]]})
+
+            for linea in lineas:
+                texto_linea = linea.rstrip('\n')
+                # Buscar todas las coincidencias en la línea
+                for match in regex.finditer(texto_linea):
+                    patronAVolcar = match.group(0)
+                    if (logsInConsole and debugMode): print ('Encontrado : ' + str(texto_linea))
                     if (logsInConsole and debugMode): print ('Patron : '+  patronAVolcar)
                     datos.append(patronAVolcar)
-                    #lineaConteo.append(str(contadorLinea))
-                contadorLinea =contadorLinea+1
-                    
+                contadorLinea = contadorLinea + 1
+
             datosSalida = sorted(set(datos))
             datosDic['archivo']    = nombreFichero
             datosDic['resultados'] = datosSalida
@@ -148,10 +139,10 @@ class MainApplication(tk.Frame):
     def defineSalidaFile(self):
         global fileDestino
         now = datetime.now()
-        nameDefault = now
+        nameDefault = now.strftime('%Y%m%d_%H%M%S')
         if not (fileOrigen == ''):
-            nameDefault = fileOrigen.split('/')[-1].split('.')[0]
-        fileDestino = asksaveasfilename(defaultextension=[('csv', '*.csv')], initialfile = nameDefault , filetypes=[("Fichero Excel", "*.xlsx")])
+            nameDefault = os.path.splitext(os.path.basename(fileOrigen))[0]
+        fileDestino = asksaveasfilename(defaultextension='.xlsx', initialfile = nameDefault , filetypes=[("Fichero Excel", "*.xlsx")])
         if not (fileDestino == ''):
             self.labelDestino.config (text='Destino  : ' + fileDestino)
             
