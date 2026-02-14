@@ -1,25 +1,19 @@
 #################PROYECTO##################
 __proyect__    = "Regex2Excel"
 __author__     = "Mario Rubio Avila"
-__version__    = "V22.10.0.025"
+__version__    = "V26.02.014"
 '''  
 '''
 __maintainer__ = "Mario Rubio"
 __status__     = "Development" #"Prototype", "Development", or "Production"
 __infoAPP__    = "Dado un fichero de texto busca una expresión regular y las coincidencias las guarda en un xlsx. Permite la busqueda dentro de una carpeta"
-'''
-Bugs conocidos : 
-    Si la expresion aparece más de una vez en la misma linea.Solo coge la primera.
-    El nombre de salida por defecto te pone fichero con extension .xml y si no lo borras falla.
-'''
+
 
 debugMode = False
 
 import tkinter as tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename, askdirectory
-from tkinter.simpledialog import askstring
 from tkinter import messagebox
-import xml.etree.ElementTree as ET
 import os
 import re
 import pandas as pd
@@ -69,7 +63,7 @@ class MainApplication(tk.Frame):
         self.guardarBoton.pack(padx = 20, pady=0)
         self.labelDestino = tk.Label(self.parent, text='Destino : ' + 'No seleccionado', relief=tk.RAISED, width=250 )
         self.labelDestino.pack(padx = 20, pady=10)
-        self.procesar = tk.Button(text ="Procesar", command = lambda:self.procesarDocumento(fileOrigen,fileDestino),state='disabled', width=250)
+        self.procesar = tk.Button(text ="Procesar", command = lambda:self.run_process(),state='disabled', width=250)
         self.procesar.pack(padx = 20, pady=0)
 
     def infoAPP(self):
@@ -84,7 +78,8 @@ class MainApplication(tk.Frame):
     def setExpresionBuscaFuncionesYArgumentos(self):
         self.entry.delete(0,tk.END)
         #Es la expresion regular para buscar llamadas a funciones
-        self.entry.insert(0,'([a-zA-Z1-9_]+[.]){0,}+[a-zA-Z1-9_]+[(]+[a-zA-Z0-9_, .":+\[\]()->\n]*)')
+        # Patrón: opcional prefijo con puntos, nombre de función y paréntesis con argumentos (incluye saltos de línea)
+        self.entry.insert(0, r'([a-zA-Z1-9_]+[.]){0,}[a-zA-Z1-9_]+\([a-zA-Z0-9_, .":+\[\]()\-\>\n]*\)')
 
 
     def setExpresionDeclaracionDeFunciones(self):
@@ -149,6 +144,70 @@ class MainApplication(tk.Frame):
         else:
             self.procesar.config(state='disabled')
         self.evaluateActivate()
+
+    def run_process(self):
+        global fileOrigen, fileDestino
+        if fileOrigen == '' or fileDestino == '':
+            messagebox.showerror(message="Origen o destino no seleccionados.", title="Error")
+            return
+        try:
+            df = self.procesarDocumento(fileOrigen, fileDestino)
+        except Exception as e:
+            messagebox.showerror(message=f"Error procesando el fichero:\n{e}", title="Error Procesado")
+            return
+        # Mostrar modal con resultado y opción de abrir fichero
+        self.post_process_modal(fileDestino, df)
+
+    def post_process_modal(self, filepath, df):
+        # Crear ventana modal personalizada
+        modal = tk.Toplevel(self.parent)
+        modal.title("Resultado")
+        modal.geometry("420x160")
+        modal.transient(self.parent)
+        modal.grab_set()
+
+        resultados = []
+        try:
+            resultados = df.get('resultados', [])
+            if isinstance(resultados, pd.Series):
+                resultados = resultados.tolist()
+        except Exception:
+            resultados = []
+
+        count = len(resultados) if hasattr(resultados, '__len__') else 0
+
+        lbl = tk.Label(modal, text=f"Procesado. Resultados: {count}\nArchivo: {filepath}", justify=tk.LEFT, wraplength=400)
+        lbl.pack(padx=12, pady=12)
+
+        btn_frame = tk.Frame(modal)
+        btn_frame.pack(pady=8)
+
+        def open_and_close():
+            try:
+                if os.name == 'nt':
+                    os.startfile(filepath)
+                else:
+                    # cross-platform fallback
+                    import webbrowser
+                    webbrowser.open('file://' + os.path.abspath(filepath))
+            except Exception as e:
+                messagebox.showerror(message=f"No se pudo abrir el fichero:\n{e}", title="Error Abrir")
+            modal.destroy()
+
+        def just_close():
+            modal.destroy()
+
+        abrir_btn = tk.Button(btn_frame, text="Abrir fichero", command=open_and_close, width=15)
+        abrir_btn.pack(side=tk.LEFT, padx=8)
+        terminar_btn = tk.Button(btn_frame, text="Terminar", command=just_close, width=15)
+        terminar_btn.pack(side=tk.LEFT, padx=8)
+
+        # Center modal over parent
+        self.parent.update_idletasks()
+        x = self.parent.winfo_rootx() + (self.parent.winfo_width() // 2) - (420 // 2)
+        y = self.parent.winfo_rooty() + (self.parent.winfo_height() // 2) - (160 // 2)
+        modal.geometry(f"+{x}+{y}")
+        modal.wait_window()
 
     def evaluateActivate(self):
         if not (fileOrigen == '') and not (fileDestino == ''):

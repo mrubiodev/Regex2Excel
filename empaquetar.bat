@@ -54,8 +54,8 @@ if exist "%SCRIPT_DIR%requirements.txt" (
     %VENV_PIP% install gitpython openpyxl
 )
 
-REM Configurable entrypoint
-set "ENTRYPOINT=main.py"
+REM Configurable entrypoint (use project main script by default)
+set "ENTRYPOINT=Regex2Excel.py"
 
 REM Extract metadata from res\metadata.json using PowerShell
 echo Extrayendo metadata del proyecto...
@@ -103,6 +103,15 @@ if exist "%SCRIPT_DIR%dist\" (
     copy "%SCRIPT_DIR%requirements.txt" "%SCRIPT_DIR%dist\"
     echo Archivo de requisitos copiado exitosamente.
 
+    REM Copiar metadata.json al directorio dist si existe
+    if exist "%SCRIPT_DIR%res\metadata.json" (
+        echo Copiando res\metadata.json a dist...
+        copy "%SCRIPT_DIR%res\metadata.json" "%SCRIPT_DIR%dist\"
+        echo metadata.json copiado a dist.
+    ) else (
+        echo No se encontró res\metadata.json; omitiendo copia.
+    )
+
     if exist "%SCRIPT_DIR%resources_release\" (
         echo Ambas carpetas existen. Copiando archivos...
         xcopy /E /I /Y  "%SCRIPT_DIR%resources_release\" "%SCRIPT_DIR%dist\"
@@ -111,17 +120,46 @@ if exist "%SCRIPT_DIR%dist\" (
         echo La carpeta "%SCRIPT_DIR%dist/" existe, pero la carpeta "resources_release" no.
     )
 
-    REM Create release directory and zip dist into release\<project>_<version>.zip
+    REM Create release directory and zip the executable plus metadata into release\<project>_<version>.zip
     if not exist "%SCRIPT_DIR%release" mkdir "%SCRIPT_DIR%release"
-    echo Comprimiendo %SCRIPT_DIR%dist\ en %ZIP_PATH%
+    REM Prepare temporary folder with only the exe and metadata to ensure they are side-by-side in the ZIP
+    if exist "%SCRIPT_DIR%release_tmp" rmdir /S /Q "%SCRIPT_DIR%release_tmp"
+    mkdir "%SCRIPT_DIR%release_tmp"
+
+    REM Copy the built executable into the temp folder
+    if exist "%SCRIPT_DIR%dist\%PROJECT%.exe" (
+        copy "%SCRIPT_DIR%dist\%PROJECT%.exe" "%SCRIPT_DIR%release_tmp\" >nul
+    ) else (
+        echo Advertencia: ejecutable %SCRIPT_DIR%dist\%PROJECT%.exe no encontrado; incluyendo todo el contenido de dist en el ZIP en su lugar.
+        xcopy /E /I /Y "%SCRIPT_DIR%dist\" "%SCRIPT_DIR%release_tmp\"
+    )
+
+    REM Copy metadata and requirements if present
+    if exist "%SCRIPT_DIR%dist\requirements.txt" copy "%SCRIPT_DIR%dist\requirements.txt" "%SCRIPT_DIR%release_tmp\" >nul
+    if exist "%SCRIPT_DIR%res\metadata.json" copy "%SCRIPT_DIR%res\metadata.json" "%SCRIPT_DIR%release_tmp\" >nul
+
+    echo Comprimiendo %SCRIPT_DIR%release_tmp\ en %ZIP_PATH%
     if exist "%ZIP_PATH%" (
         del /Q "%ZIP_PATH%"
     )
-    powershell -NoProfile -Command "Compress-Archive -Path '%SCRIPT_DIR%dist\*' -DestinationPath '%ZIP_PATH%' -Force"
+    powershell -NoProfile -Command "Compress-Archive -Path '%SCRIPT_DIR%release_tmp\*' -DestinationPath '%ZIP_PATH%' -Force"
     if exist "%ZIP_PATH%" (
         echo Archivo comprimido creado: %ZIP_PATH%
     ) else (
         echo Error: no se creo el zip %ZIP_PATH%
+    )
+
+    REM Cleanup temporary folder
+    if exist "%SCRIPT_DIR%release_tmp" rmdir /S /Q "%SCRIPT_DIR%release_tmp"
+
+    REM Cleanup build and dist folders after packaging
+    if exist "%SCRIPT_DIR%build" (
+        echo Eliminando carpeta build...
+        rmdir /S /Q "%SCRIPT_DIR%build"
+    )
+    if exist "%SCRIPT_DIR%dist" (
+        echo Eliminando carpeta dist...
+        rmdir /S /Q "%SCRIPT_DIR%dist"
     )
 ) else (
     if exist "%SCRIPT_DIR%resources_release\" (
