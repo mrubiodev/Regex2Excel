@@ -28,6 +28,8 @@ extensionSalidaBloque ='py'
 outFileName = 'out_regex.xlsx'
 
 REGEX_BUSCAR_FUNCION = r'([a-zA-Z1-9_]+[.]){0,}[a-zA-Z1-9_]+[.][a-zA-Z]+[(]'
+REGEX_BUSCAR_FUNCION_Y_ARGUMENTOS = r'([a-zA-Z1-9_]+[.]){0,}[a-zA-Z1-9_]+\([a-zA-Z0-9_, .":+\[\]()\-\>\n]*\)'
+REGEX_DECLARACION_FUNCIONES = r'def [a-zA-Z]+[(]'
 
 
 class MainApplication(tk.Frame):
@@ -79,13 +81,13 @@ class MainApplication(tk.Frame):
         self.entry.delete(0,tk.END)
         #Es la expresion regular para buscar llamadas a funciones
         # Patrón: opcional prefijo con puntos, nombre de función y paréntesis con argumentos (incluye saltos de línea)
-        self.entry.insert(0, r'([a-zA-Z1-9_]+[.]){0,}[a-zA-Z1-9_]+\([a-zA-Z0-9_, .":+\[\]()\-\>\n]*\)')
+        self.entry.insert(0, REGEX_BUSCAR_FUNCION_Y_ARGUMENTOS)
 
 
     def setExpresionDeclaracionDeFunciones(self):
         self.entry.delete(0,tk.END)
         #Es la expresion regular declaracion de funciones
-        self.entry.insert(0,'def [a-zA-Z]+[(]')
+        self.entry.insert(0, REGEX_DECLARACION_FUNCIONES)
 
     def procesarDocumento(self, fileOrigenParametro, fileDestinoParametro, individualOutputFile = True):
         datos = []
