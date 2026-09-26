@@ -1,72 +1,67 @@
+# Regex2Excel
 
-Regex2Excel
-===========
+![Estado](https://img.shields.io/badge/estado-En%20desarrollo-yellow)
+![Python](https://img.shields.io/badge/Python-GUI-3776AB?logo=python&logoColor=white)
+![Tkinter](https://img.shields.io/badge/Interfaz-Tkinter-444444)
+![Pandas](https://img.shields.io/badge/Datos-Pandas-150458?logo=pandas&logoColor=white)
+![Excel](https://img.shields.io/badge/Salida-XLSX-217346?logo=microsoftexcel&logoColor=white)
 
-![Status](https://img.shields.io/badge/status-Public-2ea44f)  
-![Python](https://img.shields.io/badge/Python-3.8%2B-3776AB?logo=python&logoColor=white)  
-![Tkinter](https://img.shields.io/badge/GUI-Tkinter-444444)  
-![Pandas](https://img.shields.io/badge/Data-Pandas-150458?logo=pandas&logoColor=white)  
-![Excel](https://img.shields.io/badge/Export-Excel-217346?logo=microsoftexcel&logoColor=white)
+Aplicación de escritorio para buscar expresiones regulares en ficheros de texto y exportar las coincidencias a Excel. La versión indicada en el código y en los metadatos es **V26.02.014**.
 
+## Qué hace
 
-Descripción
-- Herramienta con interfaz gráfica (Tkinter) que busca coincidencias de expresiones regulares en un fichero o en todos los ficheros de una carpeta y exporta los resultados a un archivo Excel (.xlsx).
+- Abre un fichero y busca una expresión regular personalizada.
+- Incluye patrones preparados para localizar usos de funciones, llamadas con argumentos y declaraciones de funciones.
+- Busca también dentro de una carpeta y sus subcarpetas.
+- Exporta a `.xlsx` y muestra al terminar el número de resultados; desde el diálogo final se puede abrir el archivo generado.
 
-Características principales
-- Interfaz GUI para introducir la expresión regular y seleccionar ficheros/carpetas.
-- Menú con atajos: `Info`, `Buscar Uso Funciones`, `Buscar Uso Funciones Y Argumentos`, `Buscar Declaracion Funciones`, `Buscar En Carpetas`, `Exit`.
-- Exporta coincidencias a Excel usando `pandas.DataFrame.to_excel()`.
+En el procesamiento de un único fichero, la aplicación busca en cada línea, recoge todas las coincidencias, elimina duplicados y ordena los resultados. El Excel contiene las columnas `archivo` y `resultados`; no incluye números de línea.
 
-Detalles técnicos
-- Punto de entrada: `Regex2Excel.py` (ejecutable como script).  
-- Versión embebida en el script: `V22.10.0.025`.
-- Dependencias principales: `pandas` y `openpyxl` (para escribir .xlsx).  
-- Usa la librería estándar `tkinter` para la interfaz.
+El modo de carpetas recorre los ficheros `.py` y combina los resultados en un único `out_regex.xlsx` en la carpeta de destino.
 
-Comportamiento de búsqueda y formato de salida
-- La app lee el fichero línea a línea y busca la primera coincidencia por línea (no devuelve múltiples coincidencias en la misma línea).  
-- Al volcar la coincidencia, el código añade un paréntesis de cierre ")" al final de cada resultado.  
-- Al procesar carpetas, filtra ficheros por la extensión marcada en la variable `extensionSalidaBloque` (por defecto `py`) y concatena los resultados en `out_regex.xlsx` salvo que se indique otro destino.
+## Requisitos
 
-Instalación
-1. Crear entorno (opcional): ejecutar `CreateEnv.bat`.  
-2. Instalar dependencias:
+- Python y una instalación que incluya Tkinter.
+- pandas y openpyxl.
 
-```powershell
-pip install -r requirement.txt
-```
+La lista mínima de dependencias para ejecutar la aplicación está en `requirement.txt`:
 
-Ejecución
-- Ejecutar GUI:
+~~~powershell
+python -m pip install -r requirement.txt
+~~~
 
-```powershell
-run.bat
-# o
+`requirements.txt` contiene el conjunto fijado que usa el empaquetado del proyecto.
+
+## Ejecutar
+
+Desde la raíz del repositorio:
+
+~~~powershell
 python Regex2Excel.py
-```
+~~~
 
-- Pasos rápidos en la GUI:
-	- Insertar o seleccionar la expresión regular en la caja de texto.
-	- Pulsar `Cargar` para elegir el fichero origen (o `Buscar En Carpetas` para procesar una carpeta).
-	- Pulsar `Guardar` para seleccionar fichero de salida `.xlsx`.
-	- Pulsar `Procesar` para generar el Excel con los resultados.
+En la ventana, escribe o selecciona un patrón desde el menú **Archivo**, pulsa **Cargar** para elegir el fichero y **Guardar** para escoger el Excel de salida. Después pulsa **Procesar**.
 
-Archivos relevantes
-- `Regex2Excel.py` — script principal con la interfaz y la lógica.  
-- `requirement.txt` — lista de dependencias (nota: se llama `requirement.txt` en este repositorio).
-- `res/metadata.json` — metadatos del proyecto actualizados.
+Los patrones del menú son solo puntos de partida: puedes editar la expresión antes de procesar. En **Buscar En Carpetas**, selecciona la carpeta de origen y la de destino.
 
-Problemas conocidos (resueltos)
-- Si la expresión aparece más de una vez en la misma línea, sólo se capturaba la primera coincidencia. (Resuelto: ahora se capturan todas las coincidencias por línea.)
-- El nombre de salida por defecto podía incluir la extensión `.xml` y provocar errores al guardar. (Resuelto: el nombre por defecto ahora se calcula sin extensión y `defaultextension` es `.xlsx`.)
-- Las coincidencias volcadas terminaban con un paréntesis `)` añadido por el código. (Resuelto: ya no se añade el paréntesis adicional.)
+## Limitaciones y notas
 
-Sugerencias / próximos pasos
-- Renombrar `requirement.txt` a `requirements.txt` para compatibilidad estándar.  
-- Añadir un comprobador para capturar múltiples coincidencias por línea si se desea ese comportamiento.  
-- Quitar la adición automática de `)` a la salida o documentarlo explícitamente.
+- Las expresiones se aplican línea por línea; no se buscan coincidencias que abarquen varias líneas.
+- En la búsqueda de carpetas, la extensión está fijada a `.py` en el código. Si no encuentra ningún fichero compatible, la combinación de resultados puede fallar.
+- `run.bat` todavía intenta abrir un nombre de script antiguo que ya no existe. Usa `python Regex2Excel.py`.
+- El ZIP que aparece en `release/` se llama `Regex2Excel_V22.10.0.025.zip`, anterior a la versión actual del código. No lo confundas con una compilación de V26.02.014.
+- `CreateEnv.bat` elimina la carpeta `.venv` existente antes de crearla de nuevo. Si quieres conservar un entorno virtual, no uses ese script; crea uno manualmente.
 
-Contacto
-- Autor: Mario Rubio Avila
+~~~powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirement.txt
+python Regex2Excel.py
+~~~
 
-SEARCH_REGULAR_EXPRESION_IN_FILE_TO_XLSX
+## Estructura útil
+
+- `Regex2Excel.py`: aplicación y lógica de búsqueda.
+- `requirement.txt`: dependencias mínimas para ejecución.
+- `requirements.txt`: conjunto fijado para el entorno de empaquetado.
+- `res/metadata.json` y `CHANGELOG.md`: metadatos y cambios de la versión.
