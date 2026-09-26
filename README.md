@@ -2,6 +2,13 @@
 Regex2Excel
 ===========
 
+![Status](https://img.shields.io/badge/status-Public-2ea44f)  
+![Python](https://img.shields.io/badge/Python-3.8%2B-3776AB?logo=python&logoColor=white)  
+![Tkinter](https://img.shields.io/badge/GUI-Tkinter-444444)  
+![Pandas](https://img.shields.io/badge/Data-Pandas-150458?logo=pandas&logoColor=white)  
+![Excel](https://img.shields.io/badge/Export-Excel-217346?logo=microsoftexcel&logoColor=white)
+
+
 Descripción
 - Herramienta con interfaz gráfica (Tkinter) que busca coincidencias de expresiones regulares en un fichero o en todos los ficheros de una carpeta y exporta los resultados a un archivo Excel (.xlsx).
 
