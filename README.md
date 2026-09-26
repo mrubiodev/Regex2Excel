@@ -48,7 +48,7 @@ Los patrones del menú son solo puntos de partida: puedes editar la expresión a
 
 - Las expresiones se aplican línea por línea; no se buscan coincidencias que abarquen varias líneas.
 - En la búsqueda de carpetas, la extensión está fijada a `.py` en el código. Si no encuentra ningún fichero compatible, la combinación de resultados puede fallar.
-- `run.bat` todavía intenta abrir un nombre de script antiguo que ya no existe. Usa `python Regex2Excel.py`.
+- `run.bat` todavía intenta abrir `SEARCH_REGULAR_EXPRESION_IN_FILE_TO_XLSX.py`, que ya no existe. Usa `python Regex2Excel.py`.
 - El ZIP que aparece en `release/` se llama `Regex2Excel_V22.10.0.025.zip`, anterior a la versión actual del código. No lo confundas con una compilación de V26.02.014.
 - `CreateEnv.bat` elimina la carpeta `.venv` existente antes de crearla de nuevo. Si quieres conservar un entorno virtual, no uses ese script; crea uno manualmente.
 
