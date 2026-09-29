@@ -1,10 +1,14 @@
 # Regex2Excel
 
+> Aplicación de escritorio para buscar expresiones regulares y exportar coincidencias a Excel.
+
 ![Estado](https://img.shields.io/badge/estado-En%20desarrollo-yellow)
 ![Python](https://img.shields.io/badge/Python-GUI-3776AB?logo=python&logoColor=white)
 ![Tkinter](https://img.shields.io/badge/Interfaz-Tkinter-444444)
 ![Pandas](https://img.shields.io/badge/Datos-Pandas-150458?logo=pandas&logoColor=white)
 ![Excel](https://img.shields.io/badge/Salida-XLSX-217346?logo=microsoftexcel&logoColor=white)
+
+## Resumen
 
 Aplicación de escritorio para buscar expresiones regulares en ficheros de texto y exportar las coincidencias a Excel. La versión indicada en el código y en los metadatos es **V26.02.014**.
 
