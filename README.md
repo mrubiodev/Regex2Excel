@@ -28,13 +28,17 @@ El modo de carpetas recorre los ficheros `.py` y combina los resultados en un ú
 - Python y una instalación que incluya Tkinter.
 - pandas y openpyxl.
 
-La lista mínima de dependencias para ejecutar la aplicación está en `requirement.txt`:
+Hay dos archivos de dependencias con propósitos distintos; no son duplicados:
+
+- `requirement.txt` conserva la lista mínima de dependencias de ejecución (`pandas` y `openpyxl`) con versiones mínimas. Úsalo para ejecutar la aplicación desde Python:
 
 ~~~powershell
 python -m pip install -r requirement.txt
 ~~~
 
-`requirements.txt` contiene el conjunto fijado que usa el empaquetado del proyecto.
+- `requirements.txt` es el listado fijado del entorno de empaquetado. `CreateEnv.bat` y `empaquetar.bat` lo usan para preparar ese entorno, que incluye herramientas de compilación como PyInstaller. `empaquetar.bat` también actualiza el archivo con `pip freeze` y lo copia a la distribución.
+
+Se mantienen ambos porque instalar el conjunto de empaquetado no es necesario para usar la aplicación, mientras que los scripts del proyecto dependen de `requirements.txt`.
 
 ## Ejecutar
 
@@ -54,11 +58,11 @@ Los patrones del menú son solo puntos de partida: puedes editar la expresión a
 - En la búsqueda de carpetas, la extensión está fijada a `.py` en el código. Si no encuentra ningún fichero compatible, la combinación de resultados puede fallar.
 - `run.bat` todavía intenta abrir `SEARCH_REGULAR_EXPRESION_IN_FILE_TO_XLSX.py`, que ya no existe. Usa `python Regex2Excel.py`.
 - El ZIP que aparece en `release/` se llama `Regex2Excel_V22.10.0.025.zip`, anterior a la versión actual del código. No lo confundas con una compilación de V26.02.014.
-- `CreateEnv.bat` elimina la carpeta `.venv` existente antes de crearla de nuevo. Si quieres conservar un entorno virtual, no uses ese script; crea uno manualmente.
+- `CreateEnv.bat` elimina la carpeta `.venv` existente antes de crearla de nuevo. Si quieres conservar un entorno virtual, crea uno manualmente.
 
 ~~~powershell
 python -m venv .venv
-.\.venv\Scripts\Activate.ps1
+.\\.venv\\Scripts\\Activate.ps1
 python -m pip install -r requirement.txt
 python Regex2Excel.py
 ~~~
@@ -66,6 +70,6 @@ python Regex2Excel.py
 ## Estructura útil
 
 - `Regex2Excel.py`: aplicación y lógica de búsqueda.
-- `requirement.txt`: dependencias mínimas para ejecución.
-- `requirements.txt`: conjunto fijado para el entorno de empaquetado.
+- `requirement.txt`: dependencias mínimas para ejecutar la aplicación.
+- `requirements.txt`: dependencias fijadas para el entorno de empaquetado, utilizadas por `CreateEnv.bat` y `empaquetar.bat`.
 - `res/metadata.json` y `CHANGELOG.md`: metadatos y cambios de la versión.
