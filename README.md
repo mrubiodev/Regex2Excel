@@ -8,6 +8,8 @@
 ![Pandas](https://img.shields.io/badge/Datos-Pandas-150458?logo=pandas&logoColor=white)
 ![Excel](https://img.shields.io/badge/Salida-XLSX-217346?logo=microsoftexcel&logoColor=white)
 
+![Regex2Excel](docs/imagenes/portada.svg)
+
 ## Resumen
 
 Aplicación de escritorio para buscar expresiones regulares en ficheros de texto y exportar las coincidencias a Excel. La versión indicada en el código y en los metadatos es **V26.02.014**.
