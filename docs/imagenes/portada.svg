@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="1024" viewBox="0 0 1536 1024">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071b3d"/><stop offset=".55" stop-color="#064b79"/><stop offset="1" stop-color="#12a47e"/></linearGradient>
+  <linearGradient id="arrow" x1="0" x2="1"><stop stop-color="#08b9a0"/><stop offset="1" stop-color="#65f06f"/></linearGradient>
+  <filter id="shadow"><feDropShadow dx="0" dy="10" stdDeviation="14" flood-opacity=".35"/></filter>
+</defs>
+<rect width="1536" height="1024" fill="url(#bg)"/>
+<g font-family="Arial,Helvetica,sans-serif">
+  <text x="535" y="145" fill="white" font-size="92" font-weight="700">Regex<tspan fill="#31e98b">2</tspan>Excel</text>
+  <text x="540" y="205" fill="#c9e5f7" font-size="34">Extrae, transforma y organiza tus datos</text>
+  <text x="540" y="250" fill="#c9e5f7" font-size="34">desde expresiones regulares a Excel</text>
+  <g filter="url(#shadow)">
+    <rect x="80" y="325" width="530" height="385" rx="24" fill="#07111e" stroke="#527090" stroke-width="5"/>
+    <circle cx="120" cy="365" r="11" fill="#ff5368"/><circle cx="155" cy="365" r="11" fill="#ffc72f"/><circle cx="190" cy="365" r="11" fill="#22c55e"/>
+    <text x="120" y="430" fill="#37a9ff" font-size="24"># Expresión regular</text>
+    <text x="120" y="475" fill="#d8ff55" font-family="monospace" font-size="22">^(\d{4}-\d{2})-(\d{2})\s+(.+)$</text>
+    <text x="120" y="545" fill="#37a9ff" font-size="24"># Texto de ejemplo</text>
+    <text x="120" y="590" fill="#e8eef5" font-family="monospace" font-size="21">2025-09-25  Cliente A  123.45</text>
+    <text x="120" y="625" fill="#e8eef5" font-family="monospace" font-size="21">2025-09-26  Cliente B   67.89</text>
+    <text x="120" y="660" fill="#e8eef5" font-family="monospace" font-size="21">2025-09-27  Cliente C   42.10</text>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="915" y="330" width="530" height="360" rx="24" fill="#fff" stroke="#36c78b" stroke-width="8"/>
+    <rect x="915" y="330" width="530" height="70" rx="24" fill="#16a574"/>
+    <text x="955" y="375" fill="white" font-size="29" font-weight="700">X  Excel</text>
+    <rect x="955" y="435" width="450" height="52" fill="#148e68"/>
+    <text x="1005" y="470" fill="white" font-size="22" font-weight="700">Fecha</text><text x="1150" y="470" fill="white" font-size="22" font-weight="700">Cliente</text><text x="1300" y="470" fill="white" font-size="22" font-weight="700">Importe</text>
+    <g fill="#173b63" font-size="21"><text x="970" y="535">2025-09-25</text><text x="1150" y="535">Cliente A</text><text x="1320" y="535">123.45</text><text x="970" y="585">2025-09-26</text><text x="1150" y="585">Cliente B</text><text x="1320" y="585">67.89</text><text x="970" y="635">2025-09-27</text><text x="1150" y="635">Cliente C</text><text x="1320" y="635">42.10</text></g>
+  </g>
+  <g>
+    <circle cx="770" cy="500" r="65" fill="#fff"/><circle cx="710" cy="590" r="42" fill="#fff"/>
+    <path d="M690 500 H855 L815 455 L895 520 L815 585 L855 540 H690 Z" fill="url(#arrow)"/>
+    <circle cx="770" cy="500" r="23" fill="#0b4770"/><circle cx="710" cy="590" r="14" fill="#0b4770"/>
+  </g>
+  <g text-anchor="middle" font-size="25" fill="#eaf6ff">
+    <text x="190" y="815">⌕</text><text x="480" y="815">⚙</text><text x="770" y="815">▦</text><text x="1060" y="815">ϟ</text><text x="1350" y="815">▤</text>
+    <text x="190" y="875">Expresiones</text><text x="190" y="907">regulares</text>
+    <text x="480" y="875">Procesamiento</text><text x="480" y="907">flexible</text>
+    <text x="770" y="875">Exporta a</text><text x="770" y="907">Excel</text>
+    <text x="1060" y="875">Rápido y</text><text x="1060" y="907">sencillo</text>
+    <text x="1350" y="875">Ideal para</text><text x="1350" y="907">log y datos</text>
+  </g>
+</g>
+</svg>
